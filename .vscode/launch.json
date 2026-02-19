@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Website (Edge)",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html"
+    }
+  ]
+}

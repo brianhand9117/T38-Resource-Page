@@ -46,25 +46,27 @@ body {
 
 .site-header .container {
   position: relative;
-  padding-left: 6.5rem;
-  padding-right: 6.5rem;
+  padding-left: 9.75rem;
+  padding-right: 9.75rem;
 }
 
 .header-logo-left {
   position: absolute;
-  top: 0.2rem;
+  top: 50%;
   left: 0;
-  width: 72px;
-  height: 72px;
+  width: 108px;
+  height: 108px;
+  transform: translateY(-50%);
   object-fit: contain;
 }
 
 .header-logo {
   position: absolute;
-  top: 0.2rem;
+  top: 50%;
   right: 0;
-  width: 72px;
-  height: 72px;
+  width: 86.4px;
+  height: 86.4px;
+  transform: translateY(-50%);
   object-fit: contain;
 }
 
@@ -146,6 +148,34 @@ button:hover {
   color: var(--muted);
 }
 
+.subscribe-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  align-items: end;
+  margin-top: 0.75rem;
+}
+
+.subscribe-form label {
+  grid-column: 1 / -1;
+  color: var(--text);
+}
+
+.subscribe-form input {
+  width: 100%;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  color: var(--text);
+  background: var(--card);
+}
+
+.subscribe-message {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   border-bottom: 0;
@@ -154,13 +184,22 @@ button:hover {
 
 @media (max-width: 640px) {
   .site-header .container {
-    padding-left: 5.2rem;
-    padding-right: 5.2rem;
+    padding-left: 7.8rem;
+    padding-right: 7.8rem;
   }
 
   .header-logo-left,
+  .header-logo-left {
+    width: 84px;
+    height: 84px;
+  }
+
   .header-logo {
-    width: 56px;
-    height: 56px;
+    width: 67.2px;
+    height: 67.2px;
+  }
+
+  .subscribe-form {
+    grid-template-columns: 1fr;
   }
 }

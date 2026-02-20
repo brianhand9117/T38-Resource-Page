@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T-38 Planning Aid (Web)</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="planning-aid.css" />
+</head>
+<body>
+  <main class="app-shell" aria-live="polite">
+    <header class="header-row">
+      <img class="header-banner" src="T38 Photo.webp" alt="T-38 aircraft" />
+      <div class="title-wrap">
+        <h1>T-38 Planning Aid</h1>
+        <p>Version 3.0 (Web)</p>
+      </div>
+      <img class="header-logo" src="RPLLogo.ico" alt="RPL logo" />
+    </header>
+
+    <div class="divider" aria-hidden="true"></div>
+    <p class="subtitle">Gathering data and building your flight-planning files…</p>
+
+    <section class="steps" aria-label="Pipeline progress">
+      <article class="step-row" data-step="flights">
+        <p class="step-label">Recent T-38 Flights</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="comments">
+        <p class="step-label">Crew Comments</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="fuel">
+        <p class="step-label">Contract Fuel Locations</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="nasr">
+        <p class="step-label">Airport &amp; Runway Data</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="dcs">
+        <p class="step-label">Chart Supplement / JASU</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article id="parseRow" class="step-row sub-row" hidden>
+        <p class="step-label">↳ Parsing Publications</p>
+        <div class="bar-track"><div id="parseFill" class="bar-fill"></div></div>
+        <p id="parsePct" class="step-pct"></p>
+        <p id="parseStatus" class="step-status"></p>
+      </article>
+
+      <article class="step-row" data-step="wb_list">
+        <p class="step-label">Reference Data Update</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="kml">
+        <p class="step-label">Building KML File</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+
+      <article class="step-row" data-step="map">
+        <p class="step-label">Building Interactive Map</p>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <p class="step-pct"></p>
+        <p class="step-status">Waiting</p>
+      </article>
+    </section>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <footer class="bottom-row">
+      <p id="overallStatus" class="overall-status">Initializing…</p>
+      <div class="btn-stack">
+        <button id="legendBtn" type="button" class="btn btn-secondary">Map Legend</button>
+        <button id="creditsBtn" type="button" class="btn btn-secondary">Credits</button>
+      </div>
+    </footer>
+
+    <section id="actionsRow" class="actions-row" hidden>
+      <button id="openMapAgainBtn" type="button" class="btn btn-primary">Open GUI Map Again</button>
+      <a id="downloadKmlBtn" class="btn btn-secondary" href="#" download="T38_Apts_Web.kml">Download KML</a>
+      <button id="runAgainBtn" type="button" class="btn btn-secondary">Run Again</button>
+    </section>
+
+    <section id="mapPanel" class="map-panel" hidden>
+      <div class="map-head">
+        <p id="mapStatus" class="map-status">Loading interactive map...</p>
+      </div>
+      <div id="planningMap" class="planning-map" role="region" aria-label="T-38 airport map"></div>
+    </section>
+  </main>
+
+  <dialog id="legendDialog" class="modal">
+    <article class="modal-card">
+      <header class="modal-header">
+        <img class="modal-banner" src="T38 Photo.webp" alt="T-38 aircraft" />
+        <div class="modal-title-wrap">
+          <h2>Map Legend</h2>
+          <p>Pin Color Reference</p>
+        </div>
+        <img class="modal-logo" src="RPLLogo.ico" alt="RPL logo" />
+      </header>
+
+      <section class="modal-section">
+        <h3>Airport Inclusion Criteria</h3>
+        <ul>
+          <li>Must be in CONUS with a valid ICAO identifier (K___)</li>
+          <li>Longest declared LDA must be ≥ 7,000 ft</li>
+          <li>Must have government contract fuel on file</li>
+        </ul>
+      </section>
+
+      <section class="modal-section">
+        <h3>Pin Colors</h3>
+        <ul class="legend-list">
+          <li><span class="swatch swatch-green"></span><strong>Green Pushpin</strong> Recently landed by a T-38 crew (no issues flagged), or airport is on the Whitelist.</li>
+          <li><span class="swatch swatch-blue"></span><strong>Blue Pushpin</strong> JASU listed in the A/FD but no recent T-38 ops. Call FBO to verify cart availability.</li>
+          <li><span class="swatch swatch-yellow"></span><strong>Yellow Pushpin</strong> No JASU listed in the A/FD and no recent T-38 ops. Verify start-cart availability.</li>
+          <li><span class="swatch swatch-red"></span><strong>Red Diamond (Category 2 / 3)</strong> Requires extra planning and/or approval before use.</li>
+          <li><span class="swatch swatch-red2"></span><strong>Red Circle (Category 1)</strong> T-38 operations are prohibited.</li>
+          <li><span class="swatch swatch-red3"></span><strong>Red Pushpin (Blacklisted)</strong> T-38 operations are not authorized.</li>
+        </ul>
+      </section>
+
+      <form method="dialog" class="modal-actions">
+        <button type="submit" class="btn btn-secondary">Close</button>
+      </form>
+    </article>
+  </dialog>
+
+  <dialog id="creditsDialog" class="modal">
+    <article class="modal-card">
+      <header class="modal-header">
+        <img class="modal-banner" src="T38 Photo.webp" alt="T-38 aircraft" />
+        <div class="modal-title-wrap">
+          <h2>T-38 Planning Aid</h2>
+          <p>Version 3.0</p>
+        </div>
+        <img class="modal-logo" src="RPLLogo.ico" alt="RPL logo" />
+      </header>
+
+      <section class="modal-section">
+        <h3>RPL Military Interns</h3>
+        <ul>
+          <li>Nicholas Bostock</li>
+          <li>Jacob Cates</li>
+          <li>Alex Clark</li>
+          <li>Alec Engl</li>
+          <li>Ignatius Liberto</li>
+          <li>Adrien Richez</li>
+          <li>James Zuzelski</li>
+          <li>Evan Robertson</li>
+          <li>Brian Hand [Current Military Intern POC]</li>
+        </ul>
+      </section>
+
+      <section class="modal-section">
+        <h3>CB / AOD POCs</h3>
+        <ul>
+          <li>Sean Brady</li>
+          <li>Dan Cochran</li>
+          <li>Luke Delaney</li>
+          <li>Jonny Kim</li>
+        </ul>
+      </section>
+
+      <p class="credits-note">Built by the RPL at NASA Johnson Space Center. Go Navy, Beat Army!</p>
+
+      <form method="dialog" class="modal-actions">
+        <button type="submit" class="btn btn-secondary">Close</button>
+      </form>
+    </article>
+  </dialog>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="planning-aid.js"></script>
+</body>
+</html>

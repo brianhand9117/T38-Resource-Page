@@ -98,6 +98,8 @@ const progressStep = async (step, phases) => {
 
 const runDcsParsingSubstep = async () => {
   parseRow.hidden = false;
+  parseRow.classList.remove('is-done', 'is-error');
+  parseRow.classList.add('is-running');
   const pubs = ['SE Region.pdf', 'SW Region.pdf', 'NW Region.pdf', 'NE Region.pdf'];
   for (let i = 0; i < pubs.length; i += 1) {
     const current = i + 1;
@@ -110,6 +112,8 @@ const runDcsParsingSubstep = async () => {
   parseFill.style.width = '100%';
   parsePct.textContent = '100%';
   parseStatus.textContent = 'Complete ✓';
+  parseRow.classList.remove('is-running', 'is-error');
+  parseRow.classList.add('is-done');
 };
 
 const getNodeText = (node, tagName) => {

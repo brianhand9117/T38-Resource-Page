@@ -1,8 +1,10 @@
 const ctaButton = document.getElementById('ctaBtn');
 const message = document.getElementById('message');
+/*
 const subscribeForm = document.getElementById('subscribeForm');
 const subscribeEmail = document.getElementById('subscribeEmail');
 const subscribeMessage = document.getElementById('subscribeMessage');
+*/
 
 if (ctaButton && message) {
   ctaButton.addEventListener('click', () => {
@@ -10,6 +12,7 @@ if (ctaButton && message) {
   });
 }
 
+/*
 if (subscribeForm && subscribeEmail && subscribeMessage) {
   subscribeForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -23,3 +26,4 @@ if (subscribeForm && subscribeEmail && subscribeMessage) {
     subscribeForm.reset();
   });
 }
+*/

@@ -38,6 +38,7 @@ let mapInstance;
 let markerLayer;
 const kmlPath = './data/T38_Apts_09_Feb_2026.kml';
 const guiMapFileUrl = 'file:///C:/Users/bjhand/Desktop/T38%20Planning%20Aid/KML_Output/T38%20Map%2019%20Feb%202026%20EXPIRES%2019%20Mar%202026.html';
+const kmlDownloadName = 'T38_Apts_09_Feb_2026.kml';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -84,6 +85,8 @@ const resetAll = () => {
     URL.revokeObjectURL(currentKmlUrl);
     currentKmlUrl = '';
   }
+  downloadKmlBtn.href = kmlPath;
+  downloadKmlBtn.setAttribute('download', kmlDownloadName);
   if (markerLayer) {
     markerLayer.clearLayers();
   }
@@ -171,6 +174,8 @@ const loadFunctionalMap = async () => {
   try {
     mapPanel.hidden = false;
     mapStatus.textContent = 'Rendering airport markers from KML...';
+    downloadKmlBtn.href = kmlPath;
+    downloadKmlBtn.setAttribute('download', kmlDownloadName);
 
     const map = initMap();
     markerLayer.clearLayers();
@@ -180,6 +185,15 @@ const loadFunctionalMap = async () => {
       throw new Error(`Could not load KML (${response.status})`);
     }
     const kmlText = await response.text();
+
+    if (currentKmlUrl) {
+      URL.revokeObjectURL(currentKmlUrl);
+    }
+    const kmlBlob = new Blob([kmlText], {
+      type: 'application/vnd.google-earth.kml+xml;charset=utf-8'
+    });
+    currentKmlUrl = URL.createObjectURL(kmlBlob);
+
     const xml = new DOMParser().parseFromString(kmlText, 'application/xml');
 
     const styleNodes = [...xml.getElementsByTagNameNS('*', 'Style')];
@@ -233,10 +247,12 @@ const loadFunctionalMap = async () => {
 
     mapStatus.textContent = `Interactive map ready • ${count} airports loaded`;
     currentMapUrl = `${window.location.pathname}#mapPanel`;
-    downloadKmlBtn.href = kmlPath;
-    downloadKmlBtn.setAttribute('download', 'T38_Apts_09_Feb_2026.kml');
+    downloadKmlBtn.href = currentKmlUrl;
+    downloadKmlBtn.setAttribute('download', kmlDownloadName);
   } catch (error) {
     mapPanel.hidden = false;
+    downloadKmlBtn.href = kmlPath;
+    downloadKmlBtn.setAttribute('download', kmlDownloadName);
     mapStatus.textContent = `Map failed to load automatically. Run via a local server (for example: python -m http.server 5500), then open planning-aid.html. ${error.message}`;
   }
 };

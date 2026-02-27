@@ -15,21 +15,28 @@ if (ctaButton && message) {
 const utcClock = document.getElementById('utcClock');
 const utcDate = document.getElementById('utcDate');
 
+const padTwoDigits = (value) => String(value).padStart(2, '0');
+
 function updateUtcClock() {
-  if (!utcClock || !utcDate) {
+  if (!utcClock && !utcDate) {
     return;
   }
 
   const now = new Date();
 
-  utcClock.textContent = now.toLocaleTimeString('en-GB', {
-    hour12: false,
-    timeZone: 'UTC'
-  });
+  if (utcClock) {
+    const hours = padTwoDigits(now.getUTCHours());
+    const minutes = padTwoDigits(now.getUTCMinutes());
+    const seconds = padTwoDigits(now.getUTCSeconds());
+    utcClock.textContent = `${hours}:${minutes}:${seconds}`;
+  }
 
-  utcDate.textContent = now.toLocaleDateString('en-CA', {
-    timeZone: 'UTC'
-  });
+  if (utcDate) {
+    const year = now.getUTCFullYear();
+    const month = padTwoDigits(now.getUTCMonth() + 1);
+    const day = padTwoDigits(now.getUTCDate());
+    utcDate.textContent = `${year}-${month}-${day}`;
+  }
 }
 
 updateUtcClock();

@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "Debug Website (Edge)",
-      "type": "pwa-msedge",
+      "type": "msedge",
       "request": "launch",
       "file": "${workspaceFolder}/index.html"
     }

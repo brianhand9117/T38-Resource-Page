@@ -96,6 +96,28 @@ main {
   margin-top: 1rem;
 }
 
+.utc-clock-card {
+  text-align: center;
+}
+
+.utc-clock-value {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.utc-clock-label {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.utc-date-value {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
 .link-list {
   margin: 0.75rem 0 0;
   padding-left: 1.1rem;

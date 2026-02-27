@@ -12,6 +12,29 @@ if (ctaButton && message) {
   });
 }
 
+const utcClock = document.getElementById('utcClock');
+const utcDate = document.getElementById('utcDate');
+
+function updateUtcClock() {
+  if (!utcClock || !utcDate) {
+    return;
+  }
+
+  const now = new Date();
+
+  utcClock.textContent = now.toLocaleTimeString('en-GB', {
+    hour12: false,
+    timeZone: 'UTC'
+  });
+
+  utcDate.textContent = now.toLocaleDateString('en-CA', {
+    timeZone: 'UTC'
+  });
+}
+
+updateUtcClock();
+setInterval(updateUtcClock, 1000);
+
 /*
 if (subscribeForm && subscribeEmail && subscribeMessage) {
   subscribeForm.addEventListener('submit', (event) => {

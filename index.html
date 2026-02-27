@@ -23,6 +23,22 @@
       <p id="utcClock" class="utc-clock-value">--:--:--</p>
       <p id="utcDate" class="utc-date-value">----------</p>
       <p class="utc-clock-label">Coordinated Universal Time</p>
+
+      <div class="timezone-compare">
+        <label for="timeZoneSelect" class="timezone-label">Compare with U.S. Time Zone</label>
+        <select id="timeZoneSelect" class="timezone-select" name="timeZoneSelect">
+          <option value="America/New_York">Eastern (ET)</option>
+          <option value="America/Chicago">Central (CT)</option>
+          <option value="America/Denver">Mountain (MT)</option>
+          <option value="America/Phoenix">Arizona (MST)</option>
+          <option value="America/Los_Angeles">Pacific (PT)</option>
+          <option value="America/Anchorage">Alaska (AKT)</option>
+          <option value="Pacific/Honolulu">Hawaii (HST)</option>
+        </select>
+        <p id="selectedZoneName" class="timezone-name">Eastern (ET)</p>
+        <p id="selectedZoneClock" class="timezone-clock-value">--:--:--</p>
+        <p id="selectedZoneDate" class="timezone-date-value">----------</p>
+      </div>
     </section>
 
     <section class="card">

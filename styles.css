@@ -118,6 +118,47 @@ main {
   color: var(--text);
 }
 
+.timezone-compare {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.9rem;
+}
+
+.timezone-label {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.timezone-select {
+  margin-top: 0.4rem;
+  width: min(340px, 100%);
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  color: var(--text);
+  background: var(--card);
+}
+
+.timezone-name {
+  margin: 0.65rem 0 0;
+  color: var(--muted);
+}
+
+.timezone-clock-value {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.timezone-date-value {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
 .link-list {
   margin: 0.75rem 0 0;
   padding-left: 1.1rem;

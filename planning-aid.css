@@ -303,6 +303,34 @@ h2 {
   justify-content: flex-end;
 }
 
+.legend-modal {
+  width: min(620px, 92vw);
+}
+
+.legend-modal .modal-card {
+  padding: 0.9rem;
+}
+
+.legend-modal .modal-section {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+}
+
+.legend-modal .modal-section ul {
+  gap: 0.2rem;
+}
+
+.legend-modal .legend-list li {
+  grid-template-columns: 16px 1fr;
+  gap: 0.4rem;
+  line-height: 1.2;
+}
+
+.legend-text strong {
+  display: inline-block;
+  margin-right: 0.22rem;
+}
+
 .credits-note {
   margin-top: 0.7rem;
 }
